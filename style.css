@@ -1,0 +1,164 @@
+:root{
+  --card-radius:18px;
+  --muted:#9aa3a6;
+  --pink-1: #ff7bbd;
+  --pink-2: #ff3b94;
+}
+
+/* base */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#071015 0%, #04100f 100%);
+  color:#fff;padding:18px;
+}
+
+/* Card UI */
+.card{
+  position:relative;
+  width:360px;
+  max-width:95%;
+  background: rgba(255,255,255,0.02);
+  border-radius:var(--card-radius);
+  padding:18px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
+  text-align:center;
+  overflow: visible;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+h1{margin:6px 0 6px;font-size:20px;color:#fff}
+p{margin:0 0 14px;color:var(--muted)}
+
+.photo{height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.emoji{font-size:42px}
+
+.buttons{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
+.btn{
+  padding:10px 14px;border-radius:12px;border:0;font-weight:700;cursor:pointer;font-size:15px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.35);transition:transform .15s;
+}
+.btn.green{background:linear-gradient(90deg,var(--pink-1),var(--pink-2));color:#fff}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#ddd}
+.btn:disabled{opacity:0.6;cursor:default}
+
+.result{
+  display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:86%; background: rgba(255,255,255,0.02); border-radius:14px; padding:14px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.5); z-index:20; color:#fff;
+}
+.result.visible{display:block}
+.card.showing-result::before{
+  content:""; position:absolute; inset:0; border-radius:var(--card-radius);
+  background: rgba(0,0,0,0.45); z-index:10;
+}
+.small{font-size:12px;color:var(--muted);margin-top:10px}
+
+/* modal */
+.modal{
+  position:absolute; top:18px; left:calc(100% + 14px);
+  width:320px; max-width:calc(100vw - 40px);
+  z-index:40; pointer-events:none; opacity:0; transform-origin:left top;
+  transition:opacity .2s, transform .18s;
+}
+.modal .modal-card{
+  background:rgba(255,255,255,0.02); border-radius:12px; padding:14px;
+  box-shadow:0 14px 40px rgba(0,0,0,0.55); pointer-events:auto; border:1px solid rgba(255,255,255,0.03);
+}
+.modal:not(.hidden){pointer-events:auto;opacity:1;transform:translateY(0)}
+.modal.hidden{opacity:0;transform:translateY(-6px) scale(.99)}
+
+@media (max-width:600px){
+  .modal{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; padding:18px; background: rgba(0,0,0,0.35)}
+  .modal .modal-card{width:92%; max-width:420px}
+  .card{width:92%; padding:14px}
+  .emoji{font-size:40px}
+}
+
+/* confetti canvas */
+#confetti{position:fixed; inset:0; pointer-events:none; z-index:100}
+
+/* full-screen heart canvas class (created by JS) */
+.canvas-full{
+  position:fixed; inset:0; width:100%; height:100%; z-index:200;
+  /* default will be overridden by script to white + stars */
+  display:block;
+}
+
+/* ---------- Envelope overlay / falling animation ---------- */
+.envelope-stage{
+  position:fixed; inset:0; display:flex;align-items:flex-start;justify-content:center;
+  background: linear-gradient(180deg, rgba(2,6,10,0.75), rgba(2,6,10,0.9));
+  z-index:350; pointer-events:auto;
+  padding-top:18vh;
+  transition:opacity .45s ease;
+}
+
+/* Envelope */
+.envelope{
+  width:220px; height:140px; background:linear-gradient(180deg,#fff,#ffecec);
+  border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,0.6);
+  position:relative; cursor:pointer; transform-origin:center center;
+  animation:env-fall 900ms cubic-bezier(.22,1,.36,1) forwards;
+  display:flex;align-items:center;justify-content:center;
+  outline: none;
+}
+
+/* flap and body design */
+.env-flap{
+  position:absolute; top:8px; left:18px; right:18px; height:48px;
+  background:linear-gradient(180deg,#ffd7e6,#ffb7d7);
+  border-radius:10px;
+  transform-origin:top center;
+  box-shadow: inset 0 -6px 12px rgba(0,0,0,0.06);
+}
+.env-body{
+  position:absolute; bottom:16px; left:14px; right:14px; height:70px;
+  border-radius:8px; overflow:hidden; display:flex;align-items:center;justify-content:center;
+}
+.env-heart{
+  font-size:36px; color:#ff2d90; text-shadow:0 6px 22px rgba(255,60,140,0.18);
+}
+
+/* little landing bounce */
+@keyframes env-fall{
+  0%{ transform: translateY(-140vh) rotate(-6deg) scale(.98); opacity:0 }
+  70%{ transform: translateY(12vh) rotate(3deg) scale(1.02); opacity:1 }
+  100%{ transform: translateY(0) rotate(0) scale(1); opacity:1 }
+}
+
+/* click pop (used by JS via class toggle) */
+.envelope.pop{
+  animation: env-pop 420ms ease-out forwards;
+}
+@keyframes env-pop{
+  0%{ transform: scale(1) }
+  40%{ transform: scale(1.08) }
+  100%{ transform: scale(.02) rotate(40deg); opacity:0 }
+}
+
+/* fade out stage */
+.envelope-stage.fade{
+  opacity:0;
+  pointer-events:none;
+}
+
+/* tap hint */
+.tap-hint{
+  margin-top:12px;color:rgba(255,255,255,0.82);font-size:15px;opacity:0.95;
+}
+
+/* hidden helper */
+.hidden{ display:none !important; }
+
+/* accessibility: focus styles */
+.envelope:focus{ box-shadow:0 0 0 6px rgba(255,90,140,0.12); border-radius:12px; }
+
+/* small media tweak */
+@media (max-width:420px){
+  .envelope{ width:180px; height:120px }
+  .env-heart{ font-size:30px }
+  .tap-hint{ font-size:14px }
+}

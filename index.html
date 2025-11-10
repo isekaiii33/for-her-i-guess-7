@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You — Heart</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- falling envelope overlay (initial screen) -->
+  <div id="envelopeStage" class="envelope-stage" aria-hidden="false">
+    <div id="envInner" style="text-align:center;">
+      <div id="envelope" class="envelope" role="button" aria-label="Open message" tabindex="0">
+        <div class="env-flap"></div>
+        <div class="env-body">
+          <div class="env-heart">❤</div>
+        </div>
+      </div>
+      <div id="tapHint" class="tap-hint">Tap to open 💌</div>
+    </div>
+  </div>
+
+  <!-- main card starts hidden; revealed after envelope opens -->
+  <main class="card hidden" role="main" aria-labelledby="title">
+    <h1 id="title">Hey — can I be honest with you?</h1>
+    <p id="subtitle">I made this just for you 🙂</p>
+
+    <div class="photo" aria-hidden="true">
+      <div class="emoji">💌</div>
+    </div>
+
+    <div class="buttons" role="group" aria-label="choices">
+      <button id="yesBtn" class="btn green">Yes 💖</button>
+      <button id="noBtn" class="btn ghost">Maybe later</button>
+    </div>
+
+    <div id="result" class="result" aria-live="polite" aria-hidden="true">
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <div style="margin-top:12px;">
+        <button id="giftBtn" class="btn green">Gift for you 🎁</button>
+      </div>
+    </div>
+
+    <div id="flowerPrompt" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-card" role="document">
+        <h3>Here’s my heart for you :) ❤️</h3>
+        <p>Wanna see it form?</p>
+        <div class="modal-actions">
+          <button id="giveFlowerBtn" class="btn green">Yes — show me</button>
+          <button id="noFlowerBtn" class="btn ghost">Maybe later</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="small">— made with ♥️</footer>
+  </main>
+
+  <!-- confetti canvas -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
